@@ -111,19 +111,17 @@
             $.ajax({
                 type: "delete",
                 url: `http://113.198.238.82:8000/api/movie/${movieId}`,
+
                 dataType: "text"
             })
                 .done((result) => {
                     if (result === "ok") {
                         $(`#card-${movieId}`).remove(); // 데이터와 UI를 동기화
+                        console.log(this);
                     } else {
                         alert("삭제가 실패하였습니다.");
                     }
                 });
-            // http://113.198.238.82:8000/api/movie/{movieId변수}
-            // method : DELETE
-            // 응답 : text/plain
-            // dom객체를 삭제 - remove() 제이쿼리
         }
     </script>
 </body>
