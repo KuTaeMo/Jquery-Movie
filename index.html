@@ -82,6 +82,7 @@
         function addDiv(movies) {
             var cardGrid = $(".card-grid")[0];
             for (movie of movies) {
+                var id = movie.id;
                 var title = movie.title;
                 var rating = movie.rating;
                 var medium_cover_image = movie.medium_cover_image;
@@ -89,12 +90,13 @@
                 var newDiv = document.createElement("div");
                 newDiv.className = "card";
                 newDiv.style = "width:300px";
+                newDiv.id = "card-" + id;
 
                 var cardDetail = `<img class="card-img-top" src="${medium_cover_image}" alt="Card image">`;
                 cardDetail += `<div class="card-body">`;
                 cardDetail += `<h4 class="card-title">${title}</h4>`;
                 cardDetail += `<p class="card-text">평점 : ${rating}</p>`;
-                cardDetail += `삭제`;
+                cardDetail += `<button class="btn btn-danger" onclick="deleteById(${movie.id})">삭제</button>`;
                 cardDetail += `</div></div>`;
                 newDiv.innerHTML = cardDetail;
                 // http://113.198.238.82:8000/api/movie/1 삭제  
@@ -102,6 +104,26 @@
                 cardGrid.append(newDiv);
             }
 
+        }
+
+        function deleteById(movieId) {
+            // ajax요청 삭제 (delete, get BODY가 없다.)
+            $.ajax({
+                type: "delete",
+                url: `http://113.198.238.82:8000/api/movie/${movieId}`,
+                dataType: "text"
+            })
+                .done((result) => {
+                    if (result === "ok") {
+                        $(`#card-${movieId}`).remove(); // 데이터와 UI를 동기화
+                    } else {
+                        alert("삭제가 실패하였습니다.");
+                    }
+                });
+            // http://113.198.238.82:8000/api/movie/{movieId변수}
+            // method : DELETE
+            // 응답 : text/plain
+            // dom객체를 삭제 - remove() 제이쿼리
         }
     </script>
 </body>
